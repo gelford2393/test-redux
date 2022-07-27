@@ -1,29 +1,56 @@
 
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-import { getAnnouncements } from '../store/action/announcementActions';
-import { getErrors } from '../store/action/errorsActions';
-import { deleteError } from '../store/action/errorsDeleteAction';
-import { deleteAnnouncement } from '../store/action/announcementDeleteActions';
-// import axios from 'axios';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  getAnnouncement,
+  getError,
+  deleteAnnouncement,
+  deleteError,
+} from './../store/actions'
+import axios from 'axios';
 import Cards from './Cards';
 
-
+interface IAlertData {
+  id: string;
+  createdOn: string;
+  title: string;
+}
 const CardMessages = (props: any) => {
-  // const [alertId, setAlertId] = useState()
-  useEffect(() => {
-    props.getAnnouncements()
-    props.getErrors()
+  const dispatch = useDispatch();
+  const alert = useSelector((state: any) => state.alert);
 
+
+  const getData = async (path: string, type: string) => {
+    const res = await axios
+      .get(path)
+      .catch((err) => {
+        console.log("Err", err);
+      })
+      .then((res) => {
+        return res?.data;
+      });
+
+    type === "announcements"
+      ? dispatch(getAnnouncement(res))
+      : dispatch(getError(res));
+  };
+
+  useEffect(() => {
+    getData("http://localhost:3000/announcements", "announcements");
+    getData("http://localhost:3000/errors", "error");
   }, [])
-  const { announcements } = props.announcements
-  const { errors } = props.errors
-  const newAnnouncements = announcements.map((announcement: any) => {
+
+  const newAnnouncements = alert.announcement.map((announcement: any) => {
     return { ...announcement, category: "success" }
   })
-  const newErrors = errors.map((error: any) => {
+
+
+  const newErrors = alert.error.map((error: any) => {
     return { ...error, category: "error" }
   })
+
+
   const newAlerts = [...newAnnouncements, ...newErrors]
   const formatDate = (date: any) => {
     const calcDaysPassed = (date1: any, date2: any) =>
@@ -36,16 +63,12 @@ const CardMessages = (props: any) => {
     if (daysPassed >= 7) return `${daysPassed} days ago`;
 
   }
-  
+
   const handleOnClick = (id: any, category: string) => {
-    if (category === "success") {
-      props.deleteAnnouncement(id);
-    } else if (category === "error") {
-      props.deleteError(id);
-    }
+    category === "success" ? dispatch(deleteAnnouncement(id)) : category === "error" && dispatch(deleteError(id))
   }
-    
-  
+
+
   const alerts = newAlerts.slice().sort((a: any, b: any) => {
     const dateA: any = new Date(a.createdOn)
     const dateB: any = new Date(b.createdOn)
@@ -57,7 +80,7 @@ const CardMessages = (props: any) => {
       createdOn={formatDate(alert.createdOn)}
       id={alert.id}
       i={i}
-      handleOnClick={handleOnClick}
+      handleOnClick={() => handleOnClick(alert.id, alert.category)}
     />
   })
 
@@ -72,5 +95,4 @@ const CardMessages = (props: any) => {
 
 }
 
-const mapStateToProps = (state: { announcements: any, errors: any }) => ({ announcements: state.announcements, errors: state.errors })
-export default connect(mapStateToProps, { getAnnouncements, getErrors, deleteAnnouncement, deleteError })(CardMessages)
+export default CardMessages

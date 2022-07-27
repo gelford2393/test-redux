@@ -4,11 +4,12 @@
     border-radius: 0.5rem;
     box-shadow: 0.125rem 0.125rem 0.25rem rgba(0, 0, 0, 0.25);
     display: flex;
-    font-family: Helvetica;
+    font-family: "Lato";
     justify-content: space-between;
     padding: 1rem;
     margin: 1rem auto;
     width: 80%;
+    align-items: center;
   }
   
   .Toast--success {
@@ -33,7 +34,7 @@
   
   .Toast__message-text {
     margin-bottom: 0;
-   
+   align-items: center;
   }
   
   .Toast__button {

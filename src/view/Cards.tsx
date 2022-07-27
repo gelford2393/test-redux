@@ -10,22 +10,18 @@ interface IProps {
     createdOn: string | any;
     title: string;
     id: string;
-    handleOnClick: any;
+    handleOnClick: () => void;
 }
 const Cards = (props: IProps) => {
-   
+
     return (
         <div key={props.i} className={`Toast Toast--${props.category}`}>
-
-            <div><span className='Icons'><img src={props.category === "success" ? megaphone : alertCircle} alt="" /></span>{props.createdOn}</div>
-            <main className="Toast__message">
-                <p className="Toast__message-text">{props.title} </p>
-
-            </main>
-
-            <button className="Toast__button" type="button" onClick={(e) => props.handleOnClick(props.id, props.category)}
+            <div style={{width: 200}}><span className='Icons'><img src={props.category === "success" ? megaphone : alertCircle} alt="" /></span>{props.category === "success" ? "Announcement" : "Event Error"}</div>
+            <div style={{width: 150}}>{props.createdOn}</div>
+            <div style={{width: 450, textAlign: "left"}}>{props.title}</div>
+            <button className="Toast__button" type="button" onClick={() => props.handleOnClick()}
             >
-                <img src={remove}/>
+                <img src={remove} />
             </button>
         </div>
     )
