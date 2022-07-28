@@ -40,26 +40,25 @@ const getAlertReducer = (state = initialState, action: any) => {
         loading: false,
       };
     case DELETE_ANNOUNCEMENT:
-      const deleteAnnouncement = state?.alert.announcement?.filter(
-        (item: IAlertData) => item?.id !== action.payload
-      );
       return {
         ...state,
         alert: {
           ...state?.alert,
-          announcement: deleteAnnouncement,
+          announcement: state?.alert.announcement?.filter(
+            (item: IAlertData) => item?.id !== action.payload
+          ),
         },
         loading: false,
       };
     case DELETE_ERROR:
-      const deleteError = state?.alert.error?.filter(
-        (item: IAlertData) => item?.id !== action.payload
-      );
+      
       return {
         ...state,
         alert: {
           ...state?.alert,
-          error: deleteError,
+          error: state?.alert.error?.filter(
+            (item: IAlertData) => item?.id !== action.payload
+          ),
         },
         loading: false,
       };

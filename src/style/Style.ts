@@ -61,3 +61,19 @@ background: #FFFFFF;
 border: 1px solid #CCCCCC;
 border-radius: 4px;
 `
+export const Icons = styled.span`
+
+  padding-top: 2px;
+  margin: 10px;
+`
+export const TitleMessage = styled.div`
+width: 450;
+textAlign: "left";
+`
+
+export const DaysMessage = styled.div`
+width: 150;
+`
+export const IconMessage = styled.div`
+width: 250;
+`
